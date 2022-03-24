@@ -21,7 +21,8 @@ Future<void> fetchLeagueData() async {
   var jsonData = jsonDecode(resp.body);
   for (var item in jsonData['data']) {
     if (slugs.contains(item['slug'])) {
-      // dutch and french logos are shite!!
+      // dutch and french logos are shit!!
+      // they dont work with the overall dark theme of the application
       if ((item['slug'] != "dutch-eredivisie") &&
           (item['slug'] != "french-ligue-1")) {
         leagueData!.add(
