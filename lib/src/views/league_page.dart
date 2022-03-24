@@ -30,9 +30,9 @@ class LeaguePage extends StatelessWidget {
         height: double.infinity,
         color: const Color.fromARGB(255, 30, 68, 92),
         child: Transform.scale(
-          scale: 1.3,
+          scale: 1.5,
           child: Image.asset(
-            "assets/cr7image.jpeg",
+            "assets/backLayer.png",
             height: 128,
           ),
         ),
