@@ -1,10 +1,10 @@
+import 'package:footy/src/models/team.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 const String URL = "https://api-football-standings.azharimm.site/leagues";
 List<dynamic>? leagueData = [];
-List<dynamic>? standings = [];
-
+String? leagueName = "";
 List<String> slugs = [
   "english-premier-league",
   "spanish-primera-division",
@@ -15,10 +15,15 @@ List<String> slugs = [
 ];
 Future<void> fetchLeagueData() async {
   leagueData = [];
-  var resp = await http.get(
-    Uri.parse(URL),
-  );
-  var jsonData = jsonDecode(resp.body);
+  http.Response? resp;
+  try {
+    resp = await http.get(
+      Uri.parse(URL),
+    );
+  } catch (e) {
+    print("Error : $e");
+  }
+  var jsonData = jsonDecode(resp!.body);
   for (var item in jsonData['data']) {
     if (slugs.contains(item['slug'])) {
       // dutch and french logos are shit!!
@@ -42,8 +47,7 @@ Future<void> fetchSpecificLeagueData(int index) async {
       URL + "/${leagueData![index][3]}/standings?season=2021&sort=asc",
     ),
   );
-  var data = jsonDecode(resp.body)['data']['standings'];
-  for (var stand in data) {
-    standings!.add([stand['team']['name'], stand['stats'][6]['value']]);
-  }
+  leagueName = leagueData![index][0];
+  var data = jsonDecode(resp.body)['data'];
+  TeamModel.fromJson(data);
 }

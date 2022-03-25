@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:backdrop/backdrop.dart';
+import 'package:footy/src/controllers/theme_controller.dart';
 import 'package:footy/src/views/standing_page.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:footy/src/data/data.dart' as network;
+import 'package:footy/src/controllers/network_controller.dart' as network;
 
 class LeaguePage extends StatelessWidget {
   const LeaguePage({Key? key}) : super(key: key);
@@ -11,34 +12,33 @@ class LeaguePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackdropScaffold(
-      backgroundColor: const Color(0xFF314755),
+      backgroundColor: themeController.backgroundColor,
       appBar: BackdropAppBar(
-          backgroundColor: const Color.fromARGB(255, 30, 68, 92),
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: Text(
-            "FOOTY BALL",
-            style: GoogleFonts.aldrich(
-              color: Colors.white,
-            ),
+        backgroundColor: themeController.appbarColor,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Text(
+          "FOOTY BALL",
+          style: GoogleFonts.roboto(
+            color: Colors.white,
           ),
-          leading: const BackdropToggleButton(
-            icon: AnimatedIcons.arrow_menu,
-          )),
+        ),
+        leading: const BackdropToggleButton(
+          icon: AnimatedIcons.arrow_menu,
+        ),
+      ),
       backLayer: Container(
         width: double.infinity,
         height: double.infinity,
-        color: const Color.fromARGB(255, 30, 68, 92),
-        child: Transform.scale(
-          scale: 1.5,
-          child: Image.asset(
-            "assets/backLayer.png",
-            height: 128,
-          ),
+        color: themeController.backgroundColor,
+        child: Image.asset(
+          "assets/images/backLayer.png",
+          colorBlendMode: BlendMode.darken,
+          isAntiAlias: true,
         ),
       ),
       frontLayer: const LeagueWidget(),
-      frontLayerBackgroundColor: const Color(0xFF314755),
+      frontLayerBackgroundColor: themeController.backgroundColor.withAlpha(50),
       onBackLayerRevealed: () {
         // final assetsAudioPlayer = AssetsAudioPlayer();
         // assetsAudioPlayer.open(
@@ -76,7 +76,7 @@ class _LeagueWidgetState extends State<LeagueWidget> {
                 Radius.circular(8),
               ),
             ),
-            color: const Color(0xFF7882A4),
+            color: const Color(0xFFA9F1DF),
             child: MaterialButton(
               onPressed: () async {
                 await network.fetchSpecificLeagueData(index);

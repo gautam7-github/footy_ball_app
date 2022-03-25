@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:footy/src/data/data.dart' as network;
-import 'package:google_fonts/google_fonts.dart';
+import 'package:footy/src/controllers/network_controller.dart' as network;
+import 'package:footy/src/models/team.dart';
 
 class StandingPage extends StatefulWidget {
   String? url;
@@ -34,20 +34,21 @@ class _StandingPageState extends State<StandingPage> {
                     ),
                   ),
                 ),
-                Text(network.leagueData![1][0]),
+                Text(
+                  "${network.leagueName}",
+                ),
               ],
             ),
             Expanded(
               child: ListView.builder(
                   physics: const BouncingScrollPhysics(),
-                  itemCount: network.standings!.length,
+                  itemCount: standings.length,
                   itemBuilder: (ctx, index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
                       ),
                       child: SizedBox(
-                        height: MediaQuery.of(context).size.height / 8,
                         child: Card(
                           elevation: 8,
                           // color: Colors.grey.shade900,
@@ -69,15 +70,22 @@ class _StandingPageState extends State<StandingPage> {
                                   TableCellVerticalAlignment.middle,
                               children: [
                                 TableRow(
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(
+                                        12,
+                                      ),
+                                    ),
+                                  ),
                                   children: [
-                                    Text(
-                                      "${index + 1}",
+                                    Image.network(
+                                      "${standings[index].team!.logos![0].href}",
                                     ),
                                     Text(
-                                      "${network.standings![index][0]}",
+                                      "${standings[index].team!.displayName}",
                                     ),
                                     Text(
-                                      "${network.standings![index][1]}",
+                                      "${standings[index].stats![6].displayValue}",
                                     ),
                                   ],
                                 ),

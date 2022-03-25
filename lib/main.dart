@@ -16,6 +16,7 @@ class FootyApp extends StatelessWidget {
       title: "Footy Ball",
       debugShowCheckedModeBanner: false,
       home: HomePage(),
+      themeMode: ThemeMode.dark,
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:footy/src/controllers/theme_controller.dart';
 import 'package:footy/src/views/league_page.dart';
-import 'package:footy/src/data/data.dart' as network;
+import 'package:footy/src/controllers/network_controller.dart' as network;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,17 +14,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF314755),
+      backgroundColor: themeController.backgroundColor,
       body: FutureBuilder(
         future: network.fetchLeagueData(),
         builder: (ctx, obj) {
           if (obj.connectionState == ConnectionState.done) {
             return const LeaguePage();
           } else {
-            return Center(
-              child: buildLoader(
-                ctx,
-              ),
+            return buildLoader(
+              ctx,
             );
           }
         },
@@ -32,9 +31,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildLoader(BuildContext ctx) {
-    return const Center(
+    return Center(
       child: CircularProgressIndicator(
-        color: Colors.purple,
+        color: themeController.spinnerColor,
         strokeWidth: 6,
       ),
     );
