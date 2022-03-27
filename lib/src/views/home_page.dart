@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:footy/src/controllers/theme_controller.dart';
 import 'package:footy/src/views/league_page.dart';
 import 'package:footy/src/controllers/network_controller.dart' as network;
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -32,9 +33,22 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildLoader(BuildContext ctx) {
     return Center(
-      child: CircularProgressIndicator(
-        color: themeController.spinnerColor,
-        strokeWidth: 6,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Spacer(),
+          Center(
+            child: LoadingAnimationWidget.inkDrop(
+              color: themeController.spinnerColor,
+              size: MediaQuery.of(context).size.width / 5,
+            ),
+          ),
+          const Spacer(),
+          Image.asset(
+            "assets/images/backLayer.png",
+            scale: 1.25,
+          ),
+        ],
       ),
     );
   }

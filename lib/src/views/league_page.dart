@@ -24,27 +24,24 @@ class LeaguePage extends StatelessWidget {
           ),
         ),
         leading: const BackdropToggleButton(
-          icon: AnimatedIcons.arrow_menu,
+          icon: AnimatedIcons.pause_play,
         ),
       ),
       backLayer: Container(
         width: double.infinity,
         height: double.infinity,
         color: themeController.backgroundColor,
-        child: Image.asset(
-          "assets/images/backLayer.png",
-          colorBlendMode: BlendMode.darken,
-          isAntiAlias: true,
+        child: GestureDetector(
+          onDoubleTap: () {},
+          child: Image.asset(
+            "assets/images/backLayer.png",
+            colorBlendMode: BlendMode.darken,
+            isAntiAlias: true,
+          ),
         ),
       ),
       frontLayer: const LeagueWidget(),
       frontLayerBackgroundColor: themeController.backgroundColor.withAlpha(50),
-      onBackLayerRevealed: () {
-        // final assetsAudioPlayer = AssetsAudioPlayer();
-        // assetsAudioPlayer.open(
-        //   Audio("assets/audios/song1.mp3"),
-        // );
-      },
     );
   }
 }
@@ -59,6 +56,11 @@ class LeagueWidget extends StatefulWidget {
 class _LeagueWidgetState extends State<LeagueWidget> {
   @override
   Widget build(BuildContext context) {
+    setState(() {});
+    return buildLeagueWidget(context);
+  }
+
+  Widget buildLeagueWidget(BuildContext context) {
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
@@ -76,7 +78,7 @@ class _LeagueWidgetState extends State<LeagueWidget> {
                 Radius.circular(8),
               ),
             ),
-            color: const Color(0xFFA9F1DF),
+            color: themeController.cardColor.withAlpha(200),
             child: MaterialButton(
               onPressed: () async {
                 await network.fetchSpecificLeagueData(index);

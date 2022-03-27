@@ -28,8 +28,7 @@ Future<void> fetchLeagueData() async {
     if (slugs.contains(item['slug'])) {
       // dutch and french logos are shit!!
       // they dont work with the overall dark theme of the application
-      if ((item['slug'] != "dutch-eredivisie") &&
-          (item['slug'] != "french-ligue-1")) {
+      if ((item['slug'] != "dutch-eredivisie")) {
         leagueData!.add(
             [item['name'], item['abbr'], item['logos']['light'], item['id']]);
       } else {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:footy/src/controllers/network_controller.dart' as network;
+import 'package:footy/src/controllers/theme_controller.dart';
 import 'package:footy/src/models/team.dart';
 
 class StandingPage extends StatefulWidget {
@@ -16,7 +17,7 @@ class _StandingPageState extends State<StandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.purple.shade300,
+      backgroundColor: themeController.appbarColor,
       body: SafeArea(
         child: Column(
           children: [
