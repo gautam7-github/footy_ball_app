@@ -17,11 +17,11 @@ class LeaguePage extends StatelessWidget {
         backgroundColor: themeController.appbarColor,
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: Text(
-          "FOOTY BALL",
-          style: GoogleFonts.roboto(
-            color: Colors.white,
-          ),
+        title: Image.asset(
+          "assets/images/ball.png",
+          fit: BoxFit.scaleDown,
+          height: 64,
+          color: Colors.white,
         ),
         leading: const BackdropToggleButton(
           icon: AnimatedIcons.pause_play,
@@ -80,8 +80,7 @@ class _LeagueWidgetState extends State<LeagueWidget> {
             ),
             color: themeController.cardColor.withAlpha(200),
             child: MaterialButton(
-              onPressed: () async {
-                await network.fetchSpecificLeagueData(index);
+              onPressed: () {
                 Navigator.push(
                   context,
                   CupertinoPageRoute(
@@ -114,7 +113,7 @@ class _LeagueWidgetState extends State<LeagueWidget> {
                     network.leagueData![index][0],
                     softWrap: true,
                     style: GoogleFonts.roboto(
-                      color: Colors.black,
+                      color: Colors.grey.shade900,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
