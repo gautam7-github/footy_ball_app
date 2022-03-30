@@ -133,7 +133,7 @@ class _StandingPageState extends State<StandingPage> {
   Widget buildLoader(BuildContext ctx) {
     return Center(
       child: LoadingAnimationWidget.inkDrop(
-        color: themeController.spinnerColor,
+        color: themeController.spinnerColor2,
         size: MediaQuery.of(context).size.width / 5,
       ),
     );

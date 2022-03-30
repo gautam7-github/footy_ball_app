@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
           const Spacer(),
           Center(
             child: LoadingAnimationWidget.inkDrop(
-              color: themeController.spinnerColor,
+              color: themeController.spinnerColor2,
               size: MediaQuery.of(context).size.width / 5,
             ),
           ),
