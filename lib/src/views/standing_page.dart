@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:footy/src/controllers/network_controller.dart' as network;
 import 'package:footy/src/controllers/theme_controller.dart';
 import 'package:footy/src/models/team.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class StandingPage extends StatefulWidget {
@@ -36,24 +38,21 @@ class _StandingPageState extends State<StandingPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Hero(
-              tag: "logo${widget.index}",
-              child: Center(
-                child: Image(
-                  image: NetworkImage(widget.url.toString()),
-                  fit: BoxFit.fill,
-                  width: 72,
-                  height: 72,
-                ),
+        Hero(
+          tag: "logo${widget.index}",
+          child: Center(
+            child: CachedNetworkImage(
+              imageUrl: widget.url.toString(),
+              fit: BoxFit.fill,
+              width: 72,
+              height: 72,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  CircularProgressIndicator(
+                value: downloadProgress.progress,
+                color: themeController.spinnerColor2,
               ),
             ),
-            Text(
-              "${network.leagueName}",
-            ),
-          ],
+          ),
         ),
         FutureBuilder(
           future: network.fetchSpecificLeagueData(
@@ -61,63 +60,8 @@ class _StandingPageState extends State<StandingPage> {
           ),
           builder: (context, obj) {
             if (obj.connectionState == ConnectionState.done) {
-              return Expanded(
-                child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: standings.length,
-                    itemBuilder: (ctx, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                        ),
-                        child: SizedBox(
-                          child: Card(
-                            elevation: 8,
-                            // color: Colors.grey.shade900,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(
-                                  12,
-                                ),
-                              ),
-                            ),
-                            child: Center(
-                              child: Table(
-                                columnWidths: const <int, TableColumnWidth>{
-                                  0: FlexColumnWidth(),
-                                  1: FlexColumnWidth(),
-                                  2: FlexColumnWidth(),
-                                },
-                                defaultVerticalAlignment:
-                                    TableCellVerticalAlignment.middle,
-                                children: [
-                                  TableRow(
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(
-                                          12,
-                                        ),
-                                      ),
-                                    ),
-                                    children: [
-                                      Image.network(
-                                        "${standings[index].team!.logos![0].href}",
-                                      ),
-                                      Text(
-                                        "${standings[index].team!.displayName}",
-                                      ),
-                                      Text(
-                                        "${standings[index].stats![6].displayValue}",
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
+              return buildTeams(
+                ctx,
               );
             } else {
               return buildLoader(
@@ -130,6 +74,94 @@ class _StandingPageState extends State<StandingPage> {
     );
   }
 
+  Widget buildTeams(BuildContext ctx) {
+    return Expanded(
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
+        itemCount: standings.length,
+        itemBuilder: (ctx, index) {
+          return Container(
+            height: MediaQuery.of(context).size.height / 7,
+            margin: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 12,
+            ),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black.withAlpha(100),
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(
+                  12,
+                ),
+              ),
+            ),
+            child: Card(
+              color: themeController.appbarColor.withAlpha(200),
+              elevation: 8,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    12,
+                  ),
+                ),
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              standings[index].team!.logos![0].href.toString(),
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                            color: themeController.spinnerColor1,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        "${standings[index].team!.displayName}",
+                        textAlign: TextAlign.left,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        right: 18,
+                      ),
+                      child: Text(
+                        "${standings[index].stats![6].displayValue}",
+                        textAlign: TextAlign.left,
+                        style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Widget buildLoader(BuildContext ctx) {
     return Center(
       child: LoadingAnimationWidget.inkDrop(
@@ -139,27 +171,3 @@ class _StandingPageState extends State<StandingPage> {
     );
   }
 }
-// Row(
-//                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                             children: [
-//                               Text(
-//                                 "${index + 1}",
-//                                 style: GoogleFonts.roboto(
-//                                   color: Colors.white,
-//                                 ),
-//                               ),
-//                               Text(
-//                                 "${network.standings![index][0]}",
-//                                 textAlign: TextAlign.left,
-//                                 style: GoogleFonts.roboto(
-//                                   color: Colors.white,
-//                                 ),
-//                               ),
-//                               Text(
-//                                 "${network.standings![index][1]}",
-//                                 style: GoogleFonts.roboto(
-//                                   color: Colors.white,
-//                                 ),
-//                               ),
-//                             ],
-//                           ),

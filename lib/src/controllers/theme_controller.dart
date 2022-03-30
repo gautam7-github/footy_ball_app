@@ -6,7 +6,7 @@ class ThemeController {
   Color spinnerColor2 = const Color(0xFFeaf0ce);
   Color appbarColor = const Color(0xFF337357);
   // Color cardColor = const Color(0xFFA9F1DF);
-  Color cardColor = const Color(0xFFEAF0CE);
+  Color cardColor = const Color(0xFFC6D8AF);
   Color standingPageback = const Color(0xFF533747);
 }
 

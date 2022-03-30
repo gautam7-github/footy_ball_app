@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:backdrop/backdrop.dart';
+import 'package:flutter/services.dart';
 import 'package:footy/src/controllers/theme_controller.dart';
 import 'package:footy/src/views/standing_page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,37 +12,9 @@ class LeaguePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BackdropScaffold(
+    return Scaffold(
       backgroundColor: themeController.backgroundColor,
-      appBar: BackdropAppBar(
-        backgroundColor: themeController.appbarColor,
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Image.asset(
-          "assets/images/ball.png",
-          fit: BoxFit.scaleDown,
-          height: 64,
-          color: Colors.white,
-        ),
-        leading: const BackdropToggleButton(
-          icon: AnimatedIcons.pause_play,
-        ),
-      ),
-      backLayer: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: themeController.backgroundColor,
-        child: GestureDetector(
-          onDoubleTap: () {},
-          child: Image.asset(
-            "assets/images/backLayer.png",
-            colorBlendMode: BlendMode.darken,
-            isAntiAlias: true,
-          ),
-        ),
-      ),
-      frontLayer: const LeagueWidget(),
-      frontLayerBackgroundColor: themeController.backgroundColor.withAlpha(50),
+      body: const LeagueWidget(),
     );
   }
 }
@@ -78,9 +51,10 @@ class _LeagueWidgetState extends State<LeagueWidget> {
                 Radius.circular(8),
               ),
             ),
-            color: themeController.cardColor.withAlpha(200),
+            color: themeController.cardColor,
             child: MaterialButton(
               onPressed: () {
+                HapticFeedback.vibrate();
                 Navigator.push(
                   context,
                   CupertinoPageRoute(
@@ -99,13 +73,17 @@ class _LeagueWidgetState extends State<LeagueWidget> {
                   Hero(
                     tag: "logo$index",
                     child: Center(
-                      child: Image(
-                        image: NetworkImage(
-                          network.leagueData![index][2],
-                        ),
+                      child: CachedNetworkImage(
+                        imageUrl: network.leagueData![index][2],
                         fit: BoxFit.fill,
-                        width: 72,
                         height: 72,
+                        width: 72,
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) =>
+                                CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                          color: themeController.spinnerColor2,
+                        ),
                       ),
                     ),
                   ),
@@ -113,7 +91,7 @@ class _LeagueWidgetState extends State<LeagueWidget> {
                     network.leagueData![index][0],
                     softWrap: true,
                     style: GoogleFonts.roboto(
-                      color: Colors.grey.shade900,
+                      color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),

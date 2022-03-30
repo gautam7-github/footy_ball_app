@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:footy/src/controllers/theme_controller.dart';
 import 'package:footy/src/views/league_page.dart';
 import 'package:footy/src/controllers/network_controller.dart' as network;
@@ -20,6 +21,7 @@ class _HomePageState extends State<HomePage> {
         future: network.fetchLeagueData(),
         builder: (ctx, obj) {
           if (obj.connectionState == ConnectionState.done) {
+            HapticFeedback.vibrate();
             return const LeaguePage();
           } else {
             return buildLoader(
