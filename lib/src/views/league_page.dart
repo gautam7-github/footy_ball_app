@@ -13,7 +13,7 @@ class LeaguePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: themeController.backgroundColor,
+      backgroundColor: themeController.backgroundColor.withAlpha(200),
       body: const LeagueWidget(),
     );
   }
@@ -29,7 +29,6 @@ class LeagueWidget extends StatefulWidget {
 class _LeagueWidgetState extends State<LeagueWidget> {
   @override
   Widget build(BuildContext context) {
-    setState(() {});
     return buildLeagueWidget(context);
   }
 
@@ -37,7 +36,7 @@ class _LeagueWidgetState extends State<LeagueWidget> {
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
-      itemCount: network.leagueData!.length,
+      itemCount: 6, //network.leagueData!.length,
       itemBuilder: (ctx, index) {
         return SizedBox(
           height: MediaQuery.of(context).size.height / 3,
@@ -51,7 +50,7 @@ class _LeagueWidgetState extends State<LeagueWidget> {
                 Radius.circular(8),
               ),
             ),
-            color: themeController.cardColor,
+            color: themeController.cardColor.withAlpha(200),
             child: MaterialButton(
               onPressed: () {
                 HapticFeedback.vibrate();
@@ -67,41 +66,47 @@ class _LeagueWidgetState extends State<LeagueWidget> {
               },
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               highlightColor: Colors.green.shade500,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Hero(
-                    tag: "logo$index",
-                    child: Center(
-                      child: CachedNetworkImage(
-                        imageUrl: network.leagueData![index][2],
-                        fit: BoxFit.fill,
-                        height: 72,
-                        width: 72,
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) =>
-                                CircularProgressIndicator(
-                          value: downloadProgress.progress,
-                          color: themeController.spinnerColor2,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Text(
-                    network.leagueData![index][0],
-                    softWrap: true,
-                    style: GoogleFonts.roboto(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
+              child: buildLeagueCard(
+                ctx,
+                index,
               ),
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget buildLeagueCard(BuildContext ctx, int index) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Hero(
+          tag: "logo$index",
+          child: Center(
+            child: CachedNetworkImage(
+              imageUrl: network.leagueData![index][2],
+              fit: BoxFit.fill,
+              height: 72,
+              width: 72,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  CircularProgressIndicator(
+                value: downloadProgress.progress,
+                color: themeController.spinnerColor2,
+              ),
+            ),
+          ),
+        ),
+        Text(
+          network.leagueData![index][0],
+          softWrap: true,
+          style: GoogleFonts.roboto(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        )
+      ],
     );
   }
 }

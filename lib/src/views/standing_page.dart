@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:footy/src/controllers/network_controller.dart' as network;
 import 'package:footy/src/controllers/theme_controller.dart';
 import 'package:footy/src/models/team.dart';
+import 'package:footy/src/views/team_detail_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -26,10 +29,8 @@ class _StandingPageState extends State<StandingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: themeController.appbarColor,
-      body: SafeArea(
-        child: buildTable(
-          context,
-        ),
+      body: buildTable(
+        context,
       ),
     );
   }
@@ -38,18 +39,23 @@ class _StandingPageState extends State<StandingPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Hero(
-          tag: "logo${widget.index}",
-          child: Center(
-            child: CachedNetworkImage(
-              imageUrl: widget.url.toString(),
-              fit: BoxFit.fill,
-              width: 72,
-              height: 72,
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator(
-                value: downloadProgress.progress,
-                color: themeController.spinnerColor2,
+        GestureDetector(
+          onLongPress: () {
+            Navigator.pop(context);
+          },
+          child: Hero(
+            tag: "logo${widget.index}",
+            child: Center(
+              child: CachedNetworkImage(
+                imageUrl: widget.url.toString(),
+                fit: BoxFit.fill,
+                width: 72,
+                height: 72,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator(
+                  value: downloadProgress.progress,
+                  color: themeController.spinnerColor2,
+                ),
               ),
             ),
           ),
@@ -97,62 +103,82 @@ class _StandingPageState extends State<StandingPage> {
                 ),
               ),
             ),
-            child: Card(
-              color: themeController.appbarColor.withAlpha(200),
-              elevation: 8,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    12,
+            child: GestureDetector(
+              onTap: () {
+                HapticFeedback.vibrate();
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => TeamDetailPage(
+                      index: index,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                color: themeController.appbarColor.withAlpha(200),
+                elevation: 8,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      12,
+                    ),
                   ),
                 ),
-              ),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              standings[index].team!.logos![0].href.toString(),
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  CircularProgressIndicator(
-                            value: downloadProgress.progress,
-                            color: themeController.spinnerColor1,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: CachedNetworkImage(
+                            imageUrl: standings[index]
+                                .team!
+                                .logos![0]
+                                .href
+                                .toString(),
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) =>
+                                    CircularProgressIndicator(
+                              value: downloadProgress.progress,
+                              color: themeController.spinnerColor1,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        "${standings[index].team!.displayName}",
-                        textAlign: TextAlign.left,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: true,
-                        style: GoogleFonts.roboto(
-                          color: Colors.white,
-                          fontSize: 16,
+                      Expanded(
+                        child: Hero(
+                          tag: "team$index",
+                          child: Text(
+                            "${standings[index].team!.displayName}",
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            style: GoogleFonts.roboto(
+                              color: Colors.white,
+                              fontSize: 16,
+                              decoration: TextDecoration.none,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        right: 18,
-                      ),
-                      child: Text(
-                        "${standings[index].stats![6].displayValue}",
-                        textAlign: TextAlign.left,
-                        style: GoogleFonts.roboto(
-                          color: Colors.white,
-                          fontSize: 20,
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          right: 18,
+                        ),
+                        child: Text(
+                          "${standings[index].stats![6].displayValue}",
+                          textAlign: TextAlign.left,
+                          style: GoogleFonts.roboto(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
