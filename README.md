@@ -12,15 +12,15 @@
 
 ## Screenshots
 
-<img src="https://raw.githubusercontent.com/gautam7-github/footy_ball_app/main/screenshots/Screenshot_1648656479.png" >
+<img src="https://raw.githubusercontent.com/gautam7-github/footy_ball_app/main/screenshots/1.png" >
 
 
 
-<img src="https://raw.githubusercontent.com/gautam7-github/footy_ball_app/main/screenshots/Screenshot_1648656486.png" >
+<img src="https://raw.githubusercontent.com/gautam7-github/footy_ball_app/main/screenshots/2.png" >
 
 
 
-<img src="https://raw.githubusercontent.com/gautam7-github/footy_ball_app/main/screenshots/Screenshot_1648656482.png" >
+<img src="https://raw.githubusercontent.com/gautam7-github/footy_ball_app/main/screenshots/3.png" >
 
 ```
 Under Construction
