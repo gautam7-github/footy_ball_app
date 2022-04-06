@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:footy/src/controllers/theme_controller.dart';
 import 'package:footy/src/views/league_page.dart';
 import 'package:footy/src/controllers/network_controller.dart' as network;
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+// import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -34,15 +35,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildLoader(BuildContext ctx) {
+    HapticFeedback.vibrate();
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Spacer(),
           Center(
-            child: LoadingAnimationWidget.inkDrop(
-              color: themeController.spinnerColor2,
-              size: MediaQuery.of(context).size.width / 5,
+            child: Lottie.network(
+              "https://assets9.lottiefiles.com/packages/lf20_dSdZzy.json",
             ),
           ),
           const Spacer(),
@@ -55,3 +56,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+// LoadingAnimationWidget.inkDrop(
+            //   color: themeController.spinnerColor2,
+            //   size: MediaQuery.of(context).size.width / 5,
+            // ),

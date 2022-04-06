@@ -100,7 +100,7 @@ class _LeagueWidgetState extends State<LeagueWidget> {
         Text(
           network.leagueData![index][0],
           softWrap: true,
-          style: GoogleFonts.roboto(
+          style: GoogleFonts.sourceSansPro(
             color: Colors.black,
             fontSize: 16,
             fontWeight: FontWeight.bold,

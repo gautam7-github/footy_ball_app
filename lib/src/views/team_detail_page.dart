@@ -1,15 +1,12 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:card_swiper/card_swiper.dart';
-import 'package:footy/src/controllers/network_controller.dart';
+import 'package:flutter/services.dart';
 import 'package:footy/src/controllers/theme_controller.dart';
 import 'package:footy/src/models/team.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TeamDetailPage extends StatefulWidget {
-  int? index;
+  late int? index;
   TeamDetailPage({Key? key, required this.index}) : super(key: key);
 
   @override
@@ -17,40 +14,34 @@ class TeamDetailPage extends StatefulWidget {
 }
 
 class _TeamDetailPageState extends State<TeamDetailPage> {
-  final PageController _pageController = PageController(
-    initialPage: 0,
-    viewportFraction: 0.8,
-  );
-  int _currentPage = 0;
-
-  bool end = false;
+  PageController? controller;
   @override
   void initState() {
+    controller = PageController(
+      initialPage: 0,
+      viewportFraction: 0.7,
+    );
     super.initState();
-    Timer.periodic(
-        const Duration(
-          seconds: 5,
-        ), (Timer timer) {
-      if (_currentPage == 9) {
-        end = true;
-      } else if (_currentPage == 0) {
-        end = false;
-      }
+  }
 
-      if (end == false) {
-        _currentPage++;
-      } else {
-        _currentPage--;
-      }
+  void nextPage() {
+    controller!.animateToPage(
+      controller!.page!.toInt() + 1,
+      duration: const Duration(
+        milliseconds: 400,
+      ),
+      curve: Curves.decelerate,
+    );
+  }
 
-      _pageController.animateToPage(
-        _currentPage,
-        duration: const Duration(
-          milliseconds: 3000,
-        ),
-        curve: Curves.easeIn,
-      );
-    });
+  void previousPage() {
+    controller!.animateToPage(
+      controller!.page!.toInt() - 1,
+      duration: const Duration(
+        milliseconds: 400,
+      ),
+      curve: Curves.decelerate,
+    );
   }
 
   @override
@@ -61,43 +52,56 @@ class _TeamDetailPageState extends State<TeamDetailPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(
-              children: [
-                CachedNetworkImage(
-                  imageUrl:
-                      standings[widget.index!].team!.logos![0].href.toString(),
-                  width: 72,
-                  height: 72,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
-                    value: downloadProgress.progress,
-                    color: themeController.spinnerColor1,
-                  ),
-                ),
-                Hero(
-                  tag: "team${widget.index}",
-                  child: Text(
-                    "${standings[widget.index!].team!.displayName}",
-                    textAlign: TextAlign.center,
-                    softWrap: true,
-                    style: GoogleFonts.roboto(
-                      color: Colors.white,
-                      fontSize: 16,
-                      decoration: TextDecoration.none,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 28,
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 28),
+                    child: CachedNetworkImage(
+                      imageUrl: standings[widget.index!]
+                          .team!
+                          .logos![0]
+                          .href
+                          .toString(),
+                      width: 72,
+                      height: 72,
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        color: themeController.spinnerColor1,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  Hero(
+                    tag: "team${widget.index}",
+                    child: Text(
+                      "${standings[widget.index!].team!.displayName}",
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                      style: GoogleFonts.lato(
+                        color: Colors.white,
+                        fontSize: 16,
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Expanded(
               flex: 2,
               child: PageView(
                 physics: const BouncingScrollPhysics(),
-                controller: _pageController,
+                controller: controller,
                 children: [
                   for (var i = 0; i < 10; i++)
                     Card(
-                      color: themeController.backgroundColor,
+                      color: themeController.appbarColor,
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -109,9 +113,9 @@ class _TeamDetailPageState extends State<TeamDetailPage> {
                                   .toString(),
                               textAlign: TextAlign.center,
                               softWrap: true,
-                              style: GoogleFonts.roboto(
+                              style: GoogleFonts.sourceSansPro(
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 28,
                                 decoration: TextDecoration.none,
                               ),
                             ),
@@ -124,7 +128,7 @@ class _TeamDetailPageState extends State<TeamDetailPage> {
                               softWrap: true,
                               style: GoogleFonts.roboto(
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 56,
                                 decoration: TextDecoration.none,
                               ),
                             ),
@@ -135,7 +139,41 @@ class _TeamDetailPageState extends State<TeamDetailPage> {
                 ],
               ),
             ),
-            Spacer(),
+            Row(
+              children: [
+                Expanded(
+                  child: MaterialButton(
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    padding: null,
+                    onPressed: () {
+                      HapticFeedback.mediumImpact();
+                      previousPage();
+                    },
+                    child: Icon(
+                      Icons.chevron_left_rounded,
+                      color: themeController.cardColor,
+                      size: 32,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: MaterialButton(
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    padding: null,
+                    onPressed: () {
+                      HapticFeedback.mediumImpact();
+                      nextPage();
+                    },
+                    child: Icon(
+                      Icons.chevron_right_rounded,
+                      color: themeController.cardColor,
+                      size: 32,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const Spacer(),
           ],
         ),
       ),

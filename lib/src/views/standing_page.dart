@@ -151,11 +151,11 @@ class _StandingPageState extends State<StandingPage> {
                         child: Hero(
                           tag: "team$index",
                           child: Text(
-                            "${standings[index].team!.displayName}",
+                            "${standings[index].team!.shortDisplayName}",
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,
-                            style: GoogleFonts.roboto(
+                            style: GoogleFonts.sourceSansPro(
                               color: Colors.white,
                               fontSize: 16,
                               decoration: TextDecoration.none,
@@ -171,7 +171,7 @@ class _StandingPageState extends State<StandingPage> {
                         child: Text(
                           "${standings[index].stats![6].displayValue}",
                           textAlign: TextAlign.left,
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.sourceSansPro(
                             color: Colors.white,
                             fontSize: 20,
                           ),
