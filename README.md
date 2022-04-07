@@ -22,7 +22,5 @@
 
 <img src="https://raw.githubusercontent.com/gautam7-github/footy_ball_app/main/screenshots/3.png" >
 
-```
-Under Construction
-```
+
 #### Developed By ProdiGiniX Solutions
