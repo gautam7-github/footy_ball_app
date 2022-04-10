@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:footy/src/controllers/theme_controller.dart';
 import 'package:footy/src/models/team.dart';
@@ -101,7 +102,15 @@ class _TeamDetailPageState extends State<TeamDetailPage> {
                 children: [
                   for (var i = 0; i < 10; i++)
                     Card(
-                      color: themeController.appbarColor,
+                      elevation: 10,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            12,
+                          ),
+                        ),
+                      ),
+                      color: themeController.backgroundColor,
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -115,7 +124,7 @@ class _TeamDetailPageState extends State<TeamDetailPage> {
                               softWrap: true,
                               style: GoogleFonts.sourceSansPro(
                                 color: Colors.white,
-                                fontSize: 28,
+                                fontSize: 20,
                                 decoration: TextDecoration.none,
                               ),
                             ),
@@ -159,6 +168,8 @@ class _TeamDetailPageState extends State<TeamDetailPage> {
                 Expanded(
                   child: MaterialButton(
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    highlightColor: Colors.transparent,
+                    focusColor: Colors.transparent,
                     padding: null,
                     onPressed: () {
                       HapticFeedback.mediumImpact();

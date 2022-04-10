@@ -42,8 +42,8 @@ class _HomePageState extends State<HomePage> {
         children: [
           const Spacer(),
           Center(
-            child: Lottie.network(
-              "https://assets9.lottiefiles.com/packages/lf20_dSdZzy.json",
+            child: Lottie.asset(
+              "assets/images/football.json",
             ),
           ),
           const Spacer(),
@@ -56,7 +56,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-// LoadingAnimationWidget.inkDrop(
-            //   color: themeController.spinnerColor2,
-            //   size: MediaQuery.of(context).size.width / 5,
-            // ),
